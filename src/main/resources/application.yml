@@ -11,3 +11,15 @@ spring:
     show-sql: true
     open-in-view: false
 
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+springfox:
+  documentation:
+    swagger:
+      v2:
+        use-model-v3: true
+    enabled: true
+
+
