@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/beatdev_user_info_api
+    username: mysql
+    password: mysql
+  jpa:
+    show-sql: true
+    open-in-view: false
+

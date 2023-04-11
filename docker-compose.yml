@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+
+  mysql:
+    image: mysql:8.0.32
+    restart: always
+    environment:
+      MYSQL_DATABASE: "beatdev_user_info_api"
+      MYSQL_USER: 'mysql'
+      MYSQL_PASSWORD: "mysql"
+      MYSQL_ROOT_PASSWORD: "mysql"
+    ports:
+      - "3306:3306"
