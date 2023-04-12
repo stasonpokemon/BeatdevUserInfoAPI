@@ -3,6 +3,7 @@ package com.beatdev.api.service.impl;
 import com.beatdev.api.entity.User;
 import com.beatdev.api.entity.UserStatus;
 import com.beatdev.api.entity.dto.request.CreateUserRequestDTO;
+import com.beatdev.api.entity.dto.request.UpdateStatusUserRequestDTO;
 import com.beatdev.api.entity.dto.response.CreatedUserResponseDTO;
 import com.beatdev.api.entity.dto.response.UpdatedStatusUserResponseDTO;
 import com.beatdev.api.entity.dto.response.UserInfoResponseDTO;
@@ -84,17 +85,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<UpdatedStatusUserResponseDTO> setUserStatus(UUID uuid, String status) {
-
-        log.info("Updating user status to: {} by user's id: {}", status, uuid);
-
+    public ResponseEntity<UpdatedStatusUserResponseDTO> setUserStatus(UUID uuid,
+                                                                      UpdateStatusUserRequestDTO userRequestDTO) {
+        String userRequestDTOStatus = userRequestDTO.getStatus();
         UserStatus previousUserStatus;
         UserStatus requestUserStatus;
 
+        log.info("Updating user status to: {} by user's id: {}", userRequestDTOStatus, uuid);
+
         try {
-            requestUserStatus = UserStatus.valueOf(status.toUpperCase());
+            requestUserStatus = UserStatus.valueOf(userRequestDTOStatus.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new BadRequestException(String.format("Wrong user status: %s", status));
+            throw new BadRequestException(String.format("Wrong user status: %s", userRequestDTOStatus));
         }
 
         User user = userRepository.findById(uuid)
