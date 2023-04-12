@@ -93,7 +93,7 @@ public class UserTestDataFactory {
                 .status(UserStatus.ONLINE).build();
     }
 
-    public static ExceptionResponseDTO buildNotFoundExceptionResponseDTO(NotFoundException exception){
+    public static ExceptionResponseDTO buildNotFoundExceptionResponseDTO(NotFoundException exception) {
         return ExceptionResponseDTO.builder()
                 .message(exception.getMessage())
                 .status(HttpStatus.NOT_FOUND)

@@ -20,9 +20,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @SuperBuilder
 @ToString
-public class User extends BaseEntity{
-
-
+public class User extends BaseEntity {
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;

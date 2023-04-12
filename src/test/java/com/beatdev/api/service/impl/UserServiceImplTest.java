@@ -115,7 +115,8 @@ class UserServiceImplTest {
     @Test
     void create_WhenUserWithSpecifiedUsernameIsExists_ThrowsBadRequestException() {
         User userForSave = UserTestDataFactory.buildUserForCreateFromCreateUserRequestDTO(createUserRequestDTO);
-        String expectedExceptionMessage = String.format("There is user with specified username: %s", userForSave.getUsername());
+        String expectedExceptionMessage = String.format("There is user with specified username: %s",
+                userForSave.getUsername());
 
         when(userRepository.findByUsername(userForSave.getUsername())).thenReturn(Optional.of(onlineUser));
 
@@ -132,7 +133,8 @@ class UserServiceImplTest {
     @Test
     void create_WhenUserWithSpecifiedEmailIsExists_ThrowsBadRequestException() {
         User userForSave = UserTestDataFactory.buildUserForCreateFromCreateUserRequestDTO(createUserRequestDTO);
-        String expectedExceptionMessage = String.format("There is user with specified email: %s", userForSave.getEmail());
+        String expectedExceptionMessage = String.format("There is user with specified email: %s",
+                userForSave.getEmail());
 
         when(userRepository.findByUsername(userForSave.getUsername())).thenReturn(Optional.empty());
         when(userRepository.findByEmail(userForSave.getEmail())).thenReturn(Optional.of(onlineUser));
@@ -147,9 +149,12 @@ class UserServiceImplTest {
         verify(userRepository, never()).save(userForSave);
     }
 
-
+    /**
+     * Return UpdatedStatusUserResponseDTO.
+     * Test name did not fit into 120 characters.
+     */
     @Test
-    void setUserStatus_WhenUserIdIsValidAndUserStatusIsCorrectAndUserHasNotOfflineStatus_ReturnUpdatedStatusUserResponseDTO() {
+    void setUserStatus_WhenUserIdIsValidAndUserStatusIsCorrectAndUserHasNotOfflineStatus_ReturnUserResponseDTO() {
         HttpStatus expectedHttpStatus = HttpStatus.OK;
         String offlineCorrectStatusForRequest = "offline";
         onlineUser.setId(userId);
@@ -168,8 +173,12 @@ class UserServiceImplTest {
         verify(userRepository).findById(userId);
     }
 
+    /**
+     * Return UpdatedStatusUserResponseDTO.
+     * Test name did not fit into 120 characters.
+     */
     @Test
-    void setUserStatus_WhenUserIdIsValidAndUserStatusIsCorrectAndUserHasNotOnlineStatus_ReturnUpdatedStatusUserResponseDTO() {
+    void setUserStatus_WhenUserIdIsValidAndUserStatusIsCorrectAndUserHasNotOnlineStatus_ReturnUserResponseDTO() {
         HttpStatus expectedHttpStatus = HttpStatus.OK;
         String onlineCorrectStatusForRequest = "online";
         offlineUser.setId(userId);

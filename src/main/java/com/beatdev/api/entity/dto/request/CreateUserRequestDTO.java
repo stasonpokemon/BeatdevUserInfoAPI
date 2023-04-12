@@ -2,9 +2,6 @@ package com.beatdev.api.entity.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,11 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_EMAIL;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_EMAIL_DESCRIPTION;
+import static com.beatdev.api.util.swagger.OpenApiConstants.USER_IMAGE_LINK;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_IMAGE_LINK_DESCRIPTION;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_PASSWORD;
-import static com.beatdev.api.util.swagger.OpenApiConstants.USER_IMAGE_LINK;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_PASSWORD_DESCRIPTION;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_USERNAME;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_USERNAME_DESCRIPTION;
