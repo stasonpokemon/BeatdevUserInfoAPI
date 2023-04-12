@@ -1,6 +1,7 @@
 package com.beatdev.api.service;
 
 import com.beatdev.api.entity.dto.request.CreateUserRequestDTO;
+import com.beatdev.api.entity.dto.request.UpdateStatusUserRequestDTO;
 import com.beatdev.api.entity.dto.response.CreatedUserResponseDTO;
 import com.beatdev.api.entity.dto.response.UpdatedStatusUserResponseDTO;
 import com.beatdev.api.entity.dto.response.UserInfoResponseDTO;
@@ -17,5 +18,5 @@ public interface UserService {
 
     ResponseEntity<UserInfoResponseDTO> findById(UUID uuid);
 
-    ResponseEntity<UpdatedStatusUserResponseDTO> setUserStatus(UUID uuid, String status);
+    ResponseEntity<UpdatedStatusUserResponseDTO> setUserStatus(UUID uuid, UpdateStatusUserRequestDTO userRequestDTO);
 }

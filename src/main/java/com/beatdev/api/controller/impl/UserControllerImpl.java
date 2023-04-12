@@ -56,7 +56,7 @@ public class UserControllerImpl implements UserController {
                 userRequestDTO.getStatus(), uuid);
 
         ResponseEntity<UpdatedStatusUserResponseDTO> response =
-                userService.setUserStatus(uuid, userRequestDTO.getStatus());
+                userService.setUserStatus(uuid, userRequestDTO);
 
         log.info("PATCH setUserStatus method: successful update status of user: {}",
                 response.getBody());

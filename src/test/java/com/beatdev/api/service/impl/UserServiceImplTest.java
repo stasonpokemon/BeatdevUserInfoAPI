@@ -2,6 +2,7 @@ package com.beatdev.api.service.impl;
 
 import com.beatdev.api.entity.User;
 import com.beatdev.api.entity.dto.request.CreateUserRequestDTO;
+import com.beatdev.api.entity.dto.request.UpdateStatusUserRequestDTO;
 import com.beatdev.api.entity.dto.response.CreatedUserResponseDTO;
 import com.beatdev.api.entity.dto.response.UpdatedStatusUserResponseDTO;
 import com.beatdev.api.entity.dto.response.UserInfoResponseDTO;
@@ -51,12 +52,21 @@ class UserServiceImplTest {
 
     private CreateUserRequestDTO createUserRequestDTO;
 
+    private UpdateStatusUserRequestDTO onlineUpdateStatusUserRequestDTO;
+
+    private UpdateStatusUserRequestDTO offlineUpdateStatusUserRequestDTO;
+
+    private UpdateStatusUserRequestDTO incorrectUpdateStatusUserRequestDTO;
+
     @BeforeEach
     void initBeforeEach() {
         userId = UUID.randomUUID();
         onlineUser = UserTestDataFactory.buildUserOnlineUser();
         offlineUser = UserTestDataFactory.buildUserOfflineUser();
-        createUserRequestDTO = UserTestDataFactory.buildCreateUserRequestDTO();
+        createUserRequestDTO = UserTestDataFactory.buildValidCreateUserRequestDTO();
+        onlineUpdateStatusUserRequestDTO = UserTestDataFactory.buildOnlineUpdateStatusUserRequestDTO();
+        offlineUpdateStatusUserRequestDTO = UserTestDataFactory.buildOfflineUpdateStatusUserRequestDTO();
+        incorrectUpdateStatusUserRequestDTO = UserTestDataFactory.buildIncorrectUpdateStatusUserRequestDTO();
     }
 
     @Test
@@ -156,14 +166,13 @@ class UserServiceImplTest {
     @Test
     void setUserStatus_WhenUserIdIsValidAndUserStatusIsCorrectAndUserHasNotOfflineStatus_ReturnUserResponseDTO() {
         HttpStatus expectedHttpStatus = HttpStatus.OK;
-        String offlineCorrectStatusForRequest = "offline";
         onlineUser.setId(userId);
         UpdatedStatusUserResponseDTO expectedUpdatedStatusUserResponseDTO =
                 UserTestDataFactory.buildOfflineUpdatedStatusUserResponseDTO(userId);
         when(userRepository.findById(userId)).thenReturn(Optional.of(onlineUser));
 
         ResponseEntity<UpdatedStatusUserResponseDTO> response =
-                userService.setUserStatus(userId, offlineCorrectStatusForRequest);
+                userService.setUserStatus(userId, offlineUpdateStatusUserRequestDTO);
         UpdatedStatusUserResponseDTO responseBody = response.getBody();
 
         assertNotNull(response);
@@ -180,14 +189,13 @@ class UserServiceImplTest {
     @Test
     void setUserStatus_WhenUserIdIsValidAndUserStatusIsCorrectAndUserHasNotOnlineStatus_ReturnUserResponseDTO() {
         HttpStatus expectedHttpStatus = HttpStatus.OK;
-        String onlineCorrectStatusForRequest = "online";
         offlineUser.setId(userId);
         UpdatedStatusUserResponseDTO expectedUpdatedStatusUserResponseDTO =
                 UserTestDataFactory.buildOnlineUpdatedStatusUserResponseDTO(userId);
         when(userRepository.findById(userId)).thenReturn(Optional.of(offlineUser));
 
         ResponseEntity<UpdatedStatusUserResponseDTO> response =
-                userService.setUserStatus(userId, onlineCorrectStatusForRequest);
+                userService.setUserStatus(userId, onlineUpdateStatusUserRequestDTO);
         UpdatedStatusUserResponseDTO responseBody = response.getBody();
 
         assertNotNull(response);
@@ -200,15 +208,14 @@ class UserServiceImplTest {
 
     @Test
     void setUserStatus_WhenUserIdIsValidAndUserStatusIsCorrectAndUserHasOnlineStatus_ThrowsBadRequestException() {
-        String onlineCorrectStatusForRequest = "online";
         String expectedExceptionMessage = String.format("User with id: %s already has status: %s",
-                userId, onlineCorrectStatusForRequest.toUpperCase());
+                userId, onlineUpdateStatusUserRequestDTO.getStatus());
         when(userRepository.findById(userId)).thenReturn(Optional.of(onlineUser));
 
 
         BadRequestException badRequestException =
                 assertThrows(BadRequestException.class,
-                        () -> userService.setUserStatus(userId, onlineCorrectStatusForRequest));
+                        () -> userService.setUserStatus(userId, onlineUpdateStatusUserRequestDTO));
 
         assertNotNull(badRequestException);
         assertEquals(expectedExceptionMessage, badRequestException.getMessage());
@@ -217,15 +224,14 @@ class UserServiceImplTest {
 
     @Test
     void setUserStatus_WhenUserIdIsValidAndUserStatusIsCorrectAndUserHasOfflineStatus_ThrowsBadRequestException() {
-        String offlineCorrectStatusForRequest = "offline";
         String expectedExceptionMessage = String.format("User with id: %s already has status: %s",
-                userId, offlineCorrectStatusForRequest.toUpperCase());
+                userId, offlineUpdateStatusUserRequestDTO.getStatus());
         when(userRepository.findById(userId)).thenReturn(Optional.of(offlineUser));
 
 
         BadRequestException badRequestException =
                 assertThrows(BadRequestException.class,
-                        () -> userService.setUserStatus(userId, offlineCorrectStatusForRequest));
+                        () -> userService.setUserStatus(userId, offlineUpdateStatusUserRequestDTO));
 
         assertNotNull(badRequestException);
         assertEquals(expectedExceptionMessage, badRequestException.getMessage());
@@ -234,12 +240,12 @@ class UserServiceImplTest {
 
     @Test
     void setUserStatus_WhenUserIdIsValidAndUserStatusIsIncorrect_ThrowsBadRequestException() {
-        String incorrectStatusForRequest = "incorrect_status";
-        String expectedExceptionMessage = String.format("Wrong user status: %s", incorrectStatusForRequest);
+        String expectedExceptionMessage = String.format("Wrong user status: %s",
+                incorrectUpdateStatusUserRequestDTO.getStatus());
 
         BadRequestException badRequestException =
                 assertThrows(BadRequestException.class,
-                        () -> userService.setUserStatus(userId, incorrectStatusForRequest));
+                        () -> userService.setUserStatus(userId, incorrectUpdateStatusUserRequestDTO));
 
         assertNotNull(badRequestException);
         assertEquals(expectedExceptionMessage, badRequestException.getMessage());
@@ -248,14 +254,13 @@ class UserServiceImplTest {
 
     @Test
     void setUserStatus_WhenUserStatusIsCorrectAndUserIdIsInvalidAnd_ThrowsNotFoundException() {
-        String onlineCorrectStatusForRequest = "online";
         String expectedExceptionMessage = new NotFoundException(User.class, userId).getMessage();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
 
         NotFoundException notFoundException =
                 assertThrows(NotFoundException.class,
-                        () -> userService.setUserStatus(userId, onlineCorrectStatusForRequest));
+                        () -> userService.setUserStatus(userId, onlineUpdateStatusUserRequestDTO));
 
         assertNotNull(notFoundException);
         assertEquals(expectedExceptionMessage, notFoundException.getMessage());

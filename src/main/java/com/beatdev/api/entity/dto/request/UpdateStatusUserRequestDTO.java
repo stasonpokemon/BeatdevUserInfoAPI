@@ -25,6 +25,6 @@ public class UpdateStatusUserRequestDTO {
 
     @NotBlank(message = "Status can't be null")
     @Schema(example = USER_ONLINE_STATUS, description = USER_STATUS_DESCRIPTION)
-    @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "status", access = JsonProperty.Access.READ_WRITE)
     private String status;
 }

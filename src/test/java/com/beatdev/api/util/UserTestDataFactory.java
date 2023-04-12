@@ -3,15 +3,17 @@ package com.beatdev.api.util;
 import com.beatdev.api.entity.User;
 import com.beatdev.api.entity.UserStatus;
 import com.beatdev.api.entity.dto.request.CreateUserRequestDTO;
+import com.beatdev.api.entity.dto.request.UpdateStatusUserRequestDTO;
+import com.beatdev.api.entity.dto.response.CreatedUserResponseDTO;
 import com.beatdev.api.entity.dto.response.UpdatedStatusUserResponseDTO;
 import com.beatdev.api.entity.dto.response.UserInfoResponseDTO;
 import com.beatdev.api.entity.mapper.UserMapper;
+import com.beatdev.api.exception.BadRequestException;
 import com.beatdev.api.exception.NotFoundException;
 import com.beatdev.api.exception.dto.ExceptionResponseDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mapstruct.factory.Mappers;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -60,11 +62,11 @@ public class UserTestDataFactory {
                 .status(user.getStatus()).build();
     }
 
-    public static CreateUserRequestDTO buildCreateUserRequestDTO() {
+    public static CreateUserRequestDTO buildValidCreateUserRequestDTO() {
         return CreateUserRequestDTO.builder()
                 .username("testusername")
                 .password("testpassword")
-                .email("testemail.gmail.com")
+                .email("testemail@gmail.com")
                 .imageLink("https://avatars.mds.yandex.net/i?id=aa3e10c6aa0fbcd2d0face272ca6d10cc6fb5f59" +
                         "-8498011-images-thumbs&n=13").build();
     }
@@ -93,10 +95,36 @@ public class UserTestDataFactory {
                 .status(UserStatus.ONLINE).build();
     }
 
+    public static CreatedUserResponseDTO buildCreatedUserResponseDTO() {
+        return CreatedUserResponseDTO.builder()
+                .id(UUID.randomUUID()).build();
+    }
+
     public static ExceptionResponseDTO buildNotFoundExceptionResponseDTO(NotFoundException exception) {
         return ExceptionResponseDTO.builder()
                 .message(exception.getMessage())
-                .status(HttpStatus.NOT_FOUND)
                 .time(LocalDateTime.now()).build();
+    }
+
+    public static ExceptionResponseDTO buildBadRequestExceptionResponseDTO(BadRequestException exception) {
+        return ExceptionResponseDTO.builder()
+                .message(exception.getMessage())
+                .time(LocalDateTime.now()).build();
+    }
+
+
+    public static UpdateStatusUserRequestDTO buildOnlineUpdateStatusUserRequestDTO() {
+        return UpdateStatusUserRequestDTO.builder()
+                .status("ONLINE").build();
+    }
+
+    public static UpdateStatusUserRequestDTO buildOfflineUpdateStatusUserRequestDTO() {
+        return UpdateStatusUserRequestDTO.builder()
+                .status("OFFLINE").build();
+    }
+
+    public static UpdateStatusUserRequestDTO buildIncorrectUpdateStatusUserRequestDTO() {
+        return UpdateStatusUserRequestDTO.builder()
+                .status("incorrect value").build();
     }
 }
