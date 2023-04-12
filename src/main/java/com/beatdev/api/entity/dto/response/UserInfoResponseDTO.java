@@ -13,9 +13,9 @@ import java.util.UUID;
 
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_EMAIL;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_EMAIL_DESCRIPTION;
+import static com.beatdev.api.util.swagger.OpenApiConstants.USER_IMAGE_LINK;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_IMAGE_LINK_DESCRIPTION;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_ONLINE_STATUS;
-import static com.beatdev.api.util.swagger.OpenApiConstants.USER_IMAGE_LINK;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_STATUS_DESCRIPTION;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_USERNAME;
 import static com.beatdev.api.util.swagger.OpenApiConstants.USER_USERNAME_DESCRIPTION;
