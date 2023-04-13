@@ -1,13 +1,40 @@
-version: "3.9"
+version: "3.8"
+
 services:
 
   mysql:
     image: mysql:8.0.32
-    restart: always
+    restart: unless-stopped
+    env_file: ./.env
     environment:
-      MYSQL_DATABASE: "beatdev_user_info_api"
-      MYSQL_USER: 'mysql'
-      MYSQL_PASSWORD: "mysql"
-      MYSQL_ROOT_PASSWORD: "mysql"
+      MYSQL_DATABASE: $MYSQLDB_DATABASE
+      MYSQL_USER: $MYSQLDB_USER
+      MYSQL_PASSWORD: $MYSQLDB_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQLDB_ROOT_PASSWORD
     ports:
-      - "3306:3306"
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+  app:
+    depends_on:
+      - mysql
+    build: ./
+    restart: "no"
+    env_file: ./.env
+    ports:
+      - "$SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT"
+    environment:
+      SPRING_APPLICATION_JSON: '{
+          "spring.datasource.url"  : "jdbc:mysql://mysql:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?allowPublicKeyRetrieval=true&useSSL=false",
+          "spring.datasource.username" : "$MYSQLDB_USER",
+          "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+          "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
+          "spring.jpa.hibernate.ddl-auto" : "update"
+        }'
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
